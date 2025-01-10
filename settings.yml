@@ -1,9 +1,12 @@
-copy_raw_html:
-  type: bool
-  default: false
-  description: "If selected the copied contents will be raw HTML instead of the stripped down plain text"
-min_trust_level:
-  type: integer
-  default: 5
-  max: 5
-  description: "Select the minimum trust level required to see the widget. (Select 5 to show to all users)"
+copy_type:
+  type: enum
+  default: markdown
+  choices:
+    - markdown
+    - html
+  description: "Select the type of copied text you would like saved to the clipboard."
+copy_button_allowed_groups:
+  type: list
+  list_type: group
+  default: "11" # trust_level_1
+  description: "Select the groups that are allowed to use the copy button."
