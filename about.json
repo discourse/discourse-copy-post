@@ -1,10 +1,10 @@
 {
-  "name": "Copy Post Button",
+  "name": "Copy post button",
   "component": true,
-  "authors": "Keegan George",
-  "theme_version": "0.1",
+  "authors": "Discourse",
   "about_url": "https://meta.discourse.org/t/copy-post-component/218883",
-  "license_url": null,
+  "license_url": "https://github.com/discourse/discourse-copy-post/blob/main/LICENSE",
+  "theme_version": "1.0",
   "modifiers": {
     "svg_icons": [
       "copy"

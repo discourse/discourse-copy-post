@@ -1,5 +1,5 @@
 en:
   theme_metadata:
-    description: "A button in the post menu to copy a post's contents to the clipboard."
+    description: "A button in the post menu to copy a post's contents to the clipboard"
   copied: "Copied"
-  title: "copy the contents of this post"
+  title: "Copy the contents of this post"
