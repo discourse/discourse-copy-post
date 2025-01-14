@@ -48,7 +48,7 @@ RSpec.describe "Copy post spec", system: true do
     before do
       theme_component.update_setting(
         :copy_button_allowed_groups,
-        [Group::AUTO_GROUPS[:trust_level_4]],
+        Group::AUTO_GROUPS[:trust_level_4].to_s,
       )
       theme_component.save!
     end
@@ -56,6 +56,36 @@ RSpec.describe "Copy post spec", system: true do
     it "should not show the copy post button" do
       topic_page.visit_topic(topic)
       expect(copy_post_button).to have_no_copy_post_button(post.post_number)
+    end
+  end
+
+  context "when user is a member of the allowed groups" do
+    before do
+      theme_component.update_setting(
+        :copy_button_allowed_groups,
+        Group::AUTO_GROUPS[:trust_level_1].to_s,
+      )
+      theme_component.save!
+    end
+
+    it "should show the copy post button" do
+      topic_page.visit_topic(topic)
+      expect(copy_post_button).to have_copy_post_button(post.post_number)
+    end
+  end
+
+  context "when allowed groups is set to everyone group" do
+    before do
+      theme_component.update_setting(
+        :copy_button_allowed_groups,
+        Group::AUTO_GROUPS[:everyone].to_s,
+      )
+      theme_component.save!
+    end
+
+    it "should show the copy post button" do
+      topic_page.visit_topic(topic)
+      expect(copy_post_button).to have_copy_post_button(post.post_number)
     end
   end
 end
