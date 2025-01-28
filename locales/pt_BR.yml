@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 pt_BR:
+  theme_metadata:
+    description: "Botão no menu de postagem para copiar o conteúdo de uma postagem para a área de transferência"
+  title: "Copiar conteúdo desta postagem"
