@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 it:
+  theme_metadata:
+    description: "Un pulsante nel menu dei messaggi per copiare il contenuto di un messaggio negli appunti"
+  title: "Copia il contenuto di questo messaggio"
