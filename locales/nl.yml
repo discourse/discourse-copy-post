@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 nl:
+  theme_metadata:
+    description: "Een knop in het berichtmenu om de inhoud van een bericht naar het klembord te kopiëren"
+  title: "Kopieer de inhoud van dit bericht"

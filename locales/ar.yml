@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 ar:
+  theme_metadata:
+    description: "زر في قائمة المنشور لنسخ محتويات المنشور إلى الحافظة"
+  title: "نسخ محتويات هذا المنشور"

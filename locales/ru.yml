@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 ru:
+  theme_metadata:
+    description: "Кнопка в меню публикации для копирования ее содержимого в буфер обмена"
+  title: "Копировать содержимое этой публикации"

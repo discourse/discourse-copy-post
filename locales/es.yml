@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 es:
+  theme_metadata:
+    description: "Un botón en el menú de publicación para copiar el contenido de una publicación al portapapeles"
+  title: "Copiar el contenido de esta publicación"

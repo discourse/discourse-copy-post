@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 zh_CN:
+  theme_metadata:
+    description: "帖子菜单中的按钮，用于将帖子内容复制到剪贴板"
+  title: "复制此帖子的内容"

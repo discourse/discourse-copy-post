@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 tr_TR:
+  theme_metadata:
+    description: "Gönderi menüsünde bir gönderinin içeriğini panoya kopyalamak için bir düğme"
+  title: "Bu gönderinin içeriğini kopyala"
