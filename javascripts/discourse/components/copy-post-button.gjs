@@ -1,11 +1,11 @@
-import Component from '@glimmer/component';
+import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import DButton from "discourse/components/d-button";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import discourseLater from "discourse/lib/later";
 import { clipboardCopy } from "discourse/lib/utilities";
-import discourseLater from "discourse-common/lib/later";
 
 export default class CopyPostButton extends Component {
   static hidden() {
@@ -18,7 +18,10 @@ export default class CopyPostButton extends Component {
   async copyPost() {
     const cookedPost = this.args.post.cooked;
     const copyType = settings.copy_type;
-    const postContents = copyType === "html" ? cookedPost : await this.fetchRawPost(this.args.post.id);
+    const postContents =
+      copyType === "html"
+        ? cookedPost
+        : await this.fetchRawPost(this.args.post.id);
 
     if (!postContents) {
       return;
