@@ -1,9 +1,3 @@
-# WARNING: Never edit this file.
-# It will be overwritten when translations are pulled from Crowdin.
-#
-# To work with us on translations, join this project:
-# https://translate.discourse.org/
-
 nl:
   theme_metadata:
     description: "Een knop in het berichtmenu om de inhoud van een bericht naar het klembord te kopiëren"
