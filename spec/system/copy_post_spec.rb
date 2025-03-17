@@ -3,7 +3,8 @@
 require_relative "page_objects/components/copy_post_button"
 
 RSpec.describe "Copy post spec", system: true do
-  fab!(:topic)
+  fab!(:category)
+  fab!(:topic) { Fabricate(:topic, category: category) }
   fab!(:post) { Fabricate(:post_with_long_raw_content, topic: topic) }
   fab!(:user) { Fabricate(:user, refresh_auto_groups: true) }
 
