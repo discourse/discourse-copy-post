@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 pl_PL:
+  theme_metadata:
+    description: "Przycisk w menu posta do kopiowania zawartości posta do schowka."
+  title: "Skopiuj treść tego posta"
