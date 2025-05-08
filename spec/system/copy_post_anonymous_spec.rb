@@ -10,10 +10,7 @@ RSpec.describe "Copy post spec - anonymous", system: true do
 
   let(:topic_page) { PageObjects::Pages::Topic.new }
   let(:copy_post_button) { PageObjects::Components::CopyPostButton.new }
-  let(:cdp) { PageObjects::CDP.new }
   let!(:theme_component) { upload_theme_component }
-
-  before { cdp.allow_clipboard }
 
   context "when allowed groups is set to everyone group and user is logged out" do
     before do
