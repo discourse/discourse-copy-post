@@ -5,3 +5,6 @@
 # https://translate.discourse.org/
 
 pt:
+  theme_metadata:
+    description: "Um botão no menu de publicação para copiar o conteúdo de uma publicação para a área de transferência"
+  title: "Copiar o conteúdo desta publicação"
