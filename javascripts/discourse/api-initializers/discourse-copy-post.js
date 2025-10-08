@@ -2,7 +2,7 @@ import { apiInitializer } from "discourse/lib/api";
 import { AUTO_GROUPS } from "discourse/lib/constants";
 import CopyPostButton from "../components/copy-post-button";
 
-export default apiInitializer("2.0.0", (api) => {
+export default apiInitializer((api) => {
   const currentUser = api.getCurrentUser();
   const currentUserGroupIds = currentUser?.groups.map((group) => group.id);
   const allowedGroups = settings.copy_button_allowed_groups;
