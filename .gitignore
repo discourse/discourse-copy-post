@@ -1,4 +1,5 @@
 .discourse-site
 node_modules
 HELP
-.DS_Store.eslintcache
+.DS_Store
+.eslintcache
