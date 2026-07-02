@@ -10,3 +10,4 @@ copy_button_allowed_groups:
   list_type: group
   default: "11" # trust_level_1
   description: "Select the groups that are allowed to use the copy button."
+  resolve_group_membership: true
