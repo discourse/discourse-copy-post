@@ -2,22 +2,48 @@ import { apiInitializer } from "discourse/lib/api";
 import { AUTO_GROUPS } from "discourse/lib/constants";
 import CopyPostButton from "../components/copy-post-button";
 
-export default apiInitializer((api) => {
-  const currentUser = api.getCurrentUser();
-  const currentUserGroupIds = currentUser?.groups.map((group) => group.id);
-  const allowedGroups = settings.copy_button_allowed_groups;
-  const allowedGroupIds = allowedGroups.split("|").map(Number);
-  const userNotAllowed = !allowedGroupIds.some(
-    (groupId) =>
-      currentUserGroupIds?.includes(groupId) ||
-      groupId === AUTO_GROUPS.everyone.id
-  );
-
-  if (userNotAllowed) {
-    return;
+function shouldRenderCopyButton(currentUser) {
+  // Using resolve_group_membership on theme settings
+  if (Object.hasOwn(settings, "user_in_copy_button_allowed_groups")) {
+    if (settings.user_in_copy_button_allowed_groups) {
+      return true;
+    }
   }
 
-  api.registerValueTransformer("post-menu-buttons", ({ value: dag }) => {
-    dag.add("copy-post", CopyPostButton);
-  });
+  // Backwards compat, remove this once the user_in_X functionality
+  // for theme settings is in core.
+  const allowedGroupIds = settings.copy_button_allowed_groups
+    .split("|")
+    .filter(Boolean)
+    .map(Number);
+
+  if (!currentUser) {
+    if (!allowedGroupIds.includes(AUTO_GROUPS.anonymous_users.id)) {
+      return false;
+    }
+  }
+
+  const currentUserGroupIds = currentUser.groups.map((group) => group.id);
+  if (
+    !allowedGroupIds.some(
+      (groupId) =>
+        currentUserGroupIds.includes(groupId) ||
+        groupId === AUTO_GROUPS.everyone.id ||
+        groupId === AUTO_GROUPS.logged_in_users.id
+    )
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+export default apiInitializer((api) => {
+  const currentUser = api.getCurrentUser();
+
+  if (shouldRenderCopyButton(currentUser)) {
+    api.registerValueTransformer("post-menu-buttons", ({ value: dag }) => {
+      dag.add("copy-post", CopyPostButton);
+    });
+  }
 });

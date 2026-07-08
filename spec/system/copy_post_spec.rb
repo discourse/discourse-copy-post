@@ -75,11 +75,11 @@ RSpec.describe "Copy post spec", system: true do
     end
   end
 
-  context "when allowed groups is set to everyone group" do
+  context "when allowed groups is set to logged_in_users group" do
     before do
       theme_component.update_setting(
         :copy_button_allowed_groups,
-        Group::AUTO_GROUPS[:everyone].to_s,
+        Group::AUTO_GROUPS[:logged_in_users].to_s,
       )
       theme_component.save!
     end

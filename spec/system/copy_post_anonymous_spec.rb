@@ -12,11 +12,11 @@ RSpec.describe "Copy post spec - anonymous", system: true do
   let(:copy_post_button) { PageObjects::Components::CopyPostButton.new }
   let!(:theme_component) { upload_theme_component }
 
-  context "when allowed groups is set to everyone group and user is logged out" do
+  context "when allowed groups is set to anonymous_users group and user is logged out" do
     before do
       theme_component.update_setting(
         :copy_button_allowed_groups,
-        Group::AUTO_GROUPS[:everyone].to_s,
+        Group::AUTO_GROUPS[:anonymous_users].to_s,
       )
       theme_component.save!
     end
