@@ -5,9 +5,7 @@ import CopyPostButton from "../components/copy-post-button";
 function shouldRenderCopyButton(currentUser) {
   // Using resolve_group_membership on theme settings
   if (Object.hasOwn(settings, "user_in_copy_button_allowed_groups")) {
-    if (settings.user_in_copy_button_allowed_groups) {
-      return true;
-    }
+    return settings.user_in_copy_button_allowed_groups;
   }
 
   // Backwards compat, remove this once the user_in_X functionality
