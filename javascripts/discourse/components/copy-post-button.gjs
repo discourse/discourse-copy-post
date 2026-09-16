@@ -28,8 +28,8 @@ export default class CopyPostButton extends Component {
     }
 
     try {
-      this.icon = "check";
       await clipboardCopy(postContents);
+      this.icon = "check";
     } catch (error) {
       popupAjaxError(error);
     } finally {

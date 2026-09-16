@@ -16,6 +16,14 @@ module PageObjects
       def has_no_copy_post_button?(post_number)
         page.has_no_css?("#post_#{post_number} #{POST_BUTTON_SELECTOR}")
       end
+
+      def has_success_icon?(post_number)
+        page.has_css?("#post_#{post_number} #{POST_BUTTON_SELECTOR} .d-icon-check")
+      end
+
+      def has_no_success_icon?(post_number)
+        page.has_no_css?("#post_#{post_number} #{POST_BUTTON_SELECTOR} .d-icon-check")
+      end
     end
   end
 end
