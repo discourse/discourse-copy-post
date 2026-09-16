@@ -53,9 +53,7 @@ RSpec.describe "Copy post spec", system: true do
 
       copy_post_button.click_copy_post_button(post.post_number)
 
-      expect(page).to have_css(
-        "html[data-copy-post-clipboard-pending='true']",
-      )
+      expect(page).to have_css("html[data-copy-post-clipboard-pending='true']")
 
       expect(copy_post_button).to have_no_success_icon(post.post_number)
 
