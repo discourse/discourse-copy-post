@@ -30,6 +30,55 @@ RSpec.describe "Copy post spec", system: true do
       copy_post_button.click_copy_post_button(post.post_number)
       cdp.clipboard_has_text?(post.raw)
     end
+
+    it "shows success only after the clipboard write succeeds" do
+      topic_page.visit_topic(topic)
+      expect(copy_post_button).to have_copy_post_button(post.post_number)
+
+      page.execute_script(<<~JAVASCRIPT)
+        const clipboardPrototype = Object.getPrototypeOf(
+          window.navigator.clipboard
+        );
+
+        window.__copyPostOriginalWriteText = clipboardPrototype.writeText;
+
+        clipboardPrototype.writeText = function () {
+          document.documentElement.dataset.copyPostClipboardPending = "true";
+
+          return new Promise((resolve) => {
+            window.__copyPostResolveClipboard = resolve;
+          });
+        };
+      JAVASCRIPT
+
+      copy_post_button.click_copy_post_button(post.post_number)
+
+      expect(page).to have_css(
+        "html[data-copy-post-clipboard-pending='true']",
+      )
+
+      expect(copy_post_button).to have_no_success_icon(post.post_number)
+
+      page.execute_script("window.__copyPostResolveClipboard()")
+
+      expect(copy_post_button).to have_success_icon(post.post_number)
+    ensure
+      page.execute_script(<<~JAVASCRIPT)
+        window.__copyPostResolveClipboard?.();
+
+        const clipboardPrototype = Object.getPrototypeOf(
+          window.navigator.clipboard
+        );
+
+        if (window.__copyPostOriginalWriteText) {
+          clipboardPrototype.writeText = window.__copyPostOriginalWriteText;
+        }
+
+        delete window.__copyPostOriginalWriteText;
+        delete window.__copyPostResolveClipboard;
+        delete document.documentElement.dataset.copyPostClipboardPending;
+      JAVASCRIPT
+    end
   end
 
   context "when using html mode" do
