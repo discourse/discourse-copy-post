@@ -5,7 +5,7 @@ import DButton from "discourse/components/d-button";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import discourseLater from "discourse/lib/later";
-import { clipboardCopy } from "discourse/lib/utilities";
+import { clipboardCopy, clipboardCopyAsync } from "discourse/lib/utilities";
 
 export default class CopyPostButton extends Component {
   static hidden() {
@@ -16,19 +16,18 @@ export default class CopyPostButton extends Component {
 
   @action
   async copyPost() {
-    const cookedPost = this.args.post.cooked;
     const copyType = settings.copy_type;
-    const postContents =
-      copyType === "html"
-        ? cookedPost
-        : await this.fetchRawPost(this.args.post.id);
-
-    if (!postContents) {
-      return;
-    }
 
     try {
-      await clipboardCopy(postContents);
+      if (copyType === "html") {
+        await clipboardCopy(this.args.post.cooked);
+      } else {
+        await clipboardCopyAsync(async () => {
+          const { raw } = await ajax(`/posts/${this.args.post.id}.json`);
+          return new Blob([raw], { type: "text/plain" });
+        });
+      }
+
       this.icon = "check";
     } catch (error) {
       popupAjaxError(error);
@@ -36,15 +35,6 @@ export default class CopyPostButton extends Component {
       discourseLater(() => {
         this.icon = "far-copy";
       }, 2000);
-    }
-  }
-
-  async fetchRawPost(postId) {
-    try {
-      const { raw } = await ajax(`/posts/${postId}.json`);
-      return raw;
-    } catch (error) {
-      popupAjaxError(error);
     }
   }
 
