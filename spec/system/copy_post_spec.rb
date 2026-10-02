@@ -40,9 +40,9 @@ RSpec.describe "Copy post spec", system: true do
           window.navigator.clipboard
         );
 
-        window.__copyPostOriginalWriteText = clipboardPrototype.writeText;
+        window.__copyPostOriginalWrite = clipboardPrototype.write;
 
-        clipboardPrototype.writeText = function () {
+        clipboardPrototype.write = function () {
           document.documentElement.dataset.copyPostClipboardPending = "true";
 
           return new Promise((resolve) => {
@@ -68,13 +68,67 @@ RSpec.describe "Copy post spec", system: true do
           window.navigator.clipboard
         );
 
-        if (window.__copyPostOriginalWriteText) {
-          clipboardPrototype.writeText = window.__copyPostOriginalWriteText;
+        if (window.__copyPostOriginalWrite) {
+          clipboardPrototype.write = window.__copyPostOriginalWrite;
         }
 
-        delete window.__copyPostOriginalWriteText;
+        delete window.__copyPostOriginalWrite;
         delete window.__copyPostResolveClipboard;
         delete document.documentElement.dataset.copyPostClipboardPending;
+      JAVASCRIPT
+    end
+
+    it "starts the clipboard write before the raw post request finishes" do
+      topic_page.visit_topic(topic)
+      expect(copy_post_button).to have_copy_post_button(post.post_number)
+
+      page.execute_script(<<~JAVASCRIPT)
+        const clipboardPrototype = Object.getPrototypeOf(
+          window.navigator.clipboard
+        );
+
+        window.__copyPostOriginalWrite = clipboardPrototype.write;
+
+        clipboardPrototype.write = function (items) {
+          document.documentElement.dataset.copyPostClipboardWriteStarted =
+            "true";
+
+          return window.__copyPostOriginalWrite.call(this, items);
+        };
+      JAVASCRIPT
+
+      cdp.with_paused_request(%r{/posts/#{post.id}\.json}) do |request|
+        page.execute_script(<<~JAVASCRIPT)
+          document
+            .querySelector(
+              "#post_#{post.post_number} .post-controls .post-action-menu__copy-post"
+            )
+            .click();
+        JAVASCRIPT
+
+        request.wait
+
+        expect(page).to have_css("html[data-copy-post-clipboard-write-started='true']")
+
+        expect(copy_post_button).to have_no_success_icon(post.post_number)
+
+        request.resume
+      end
+
+      expect(copy_post_button).to have_success_icon(post.post_number)
+      cdp.clipboard_has_text?(post.raw)
+    ensure
+      page.execute_script(<<~JAVASCRIPT)
+        const clipboardPrototype = Object.getPrototypeOf(
+          window.navigator.clipboard
+        );
+
+        if (window.__copyPostOriginalWrite) {
+          clipboardPrototype.write = window.__copyPostOriginalWrite;
+        }
+
+        delete window.__copyPostOriginalWrite;
+        delete document.documentElement.dataset.copyPostClipboardWriteStarted;
       JAVASCRIPT
     end
   end
